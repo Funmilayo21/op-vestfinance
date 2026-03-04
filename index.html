@@ -266,8 +266,10 @@ async function connectWallet(){
   setS('sp','Connecting wallet...');
   try{
     if(window.unisat)wlt=(await window.unisat.requestAccounts())[0];
-    else if(window.opnet){await window.opnet.enable();wlt=window.opnet.selectedAddress;}
-    else if(window.bitcoin)wlt=(await window.bitcoin.connect()).address;
+else if(window.opnet){
+  const accs=await window.opnet.requestAccounts();
+  wlt=accs[0]||window.opnet.selectedAddress||window.opnet.accounts?.[0];
+}    else if(window.bitcoin)wlt=(await window.bitcoin.connect()).address;
     else if(window.ethereum)wlt=(await window.ethereum.request({method:'eth_requestAccounts'}))[0];
     else throw new Error('No wallet found. Please install UniSat.');
     const b=document.getElementById('cBtn');b.querySelector('span').textContent=wlt.slice(0,8)+'...'+wlt.slice(-5);b.classList.add('conn');

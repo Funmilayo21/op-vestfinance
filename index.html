@@ -530,7 +530,7 @@ async function fetchBal(tok) {
 //  Regtest addresses are bcrt1p... (Taproot)
 // ════════════════════════════════════════════════════════════
 async function connectWallet() {
-  const prov = window.unisat;
+ const prov = window.unisat || window.opnet || window.bitcoin || window.btc; 
   if (!prov) {
     document.getElementById('warnBox').style.display = 'block';
     document.getElementById('warnTitle').textContent = '⚠ OP_Wallet Not Detected';
@@ -608,8 +608,7 @@ function onConnected() {
 let prov = null;
 const origConnect = connectWallet;
 window.connectWallet = async function() {
-  prov = window.unisat;
-  await origConnect();
+prov = window.unisat || window.opnet || window.bitcoin || window.btc;  await origConnect();
 };
 
 function enableBtns() {
@@ -828,8 +827,7 @@ function toast(m, t='ok') {
 
 // ── AUTO-DETECT on load ──
 window.addEventListener('load', () => {
-  prov = window.unisat;
-  if (!prov) {
+prov = window.unisat || window.opnet || window.bitcoin || window.btc;  if (!prov) {
     document.getElementById('warnBox').style.display = 'block';
     setS('er', 'OP_Wallet not detected — install extension & set Regtest network');
   } else {
